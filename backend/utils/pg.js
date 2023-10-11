@@ -26,15 +26,14 @@ const createPost = async ({ titulo, url: img, descripcion }) => {
   return await genericSqlQuery(query, values)
 }
 
-const updateSong = async (id, { titulo, url: img, descripcion }) => {
-  const query = 'UPDATE posts SET titulo = $2, img = $3, descripcion = $4 WHERE id = $1 RETURNING *;'
-  const values = [id, titulo, img, descripcion]
-  return await genericSqlQuery(query, values)
+const updateSong = async (id) => {
+  const query = 'UPDATE posts SET likes = COALESCE(likes, 0) + 1 WHERE id = $1 RETURNING *;'
+  return await genericSqlQuery(query, [id])
 }
 
-const deleteSong = async () => {
-  const query = ''
-  const values = []
+const deleteSong = async (id) => {
+  const query = 'DELETE FROM posts WHERE id = $1 RETURNING *;'
+  const values = [id]
   return await genericSqlQuery(query, values)
 }
 

@@ -20,13 +20,17 @@ app.post('/posts', async (req, res) => {
   res.status(200).json(posts)
 })
 
-app.put('/posts/:id', (req, res) => {
-  updateSong(req.params, req.body)
-    .then((result) => res.status(result?.code ? 500 : 200))
+app.put('/posts/like/:id', (req, res) => {
+  updateSong(req.params.id)
+    .then((result) => res.status(result?.code ? 500 : 200).json(result))
     .catch((error) => res.status(500).json(error))
 })
 
-app.delete('/posts/:id', (req, res) => { deleteSong() })
+app.delete('/posts/:id', (req, res) => {
+  deleteSong(req.params.id)
+    .then((result) => res.status(result?.code ? 500 : 200).json(result))
+    .catch((error) => res.status(500).json(error))
+})
 
 app.all('*', (_, res) => res.status(404).json({ code: 404, message: 'Esta ruta no existe 🧐' }))
 
